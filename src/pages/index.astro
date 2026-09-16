@@ -1,0 +1,352 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Abhijit Shidlagatta | Tech Artist & Graphics Programmer">
+  <!-- HERO SECTION -->
+  <header class="hero-wrapper">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1>Abhijit Shidlagatta</h1>
+        <p class="subtitle">Technical Artist & Graphics Programmer</p>
+        <p class="bio">
+          Specializing in C++ engine programming, real-time procedural generation, and custom GPU shaders. 
+          I build tools and rendering pipelines that bridge the gap between art and code.
+        </p>
+        <div class="links">
+          <a href="https://github.com/Abhijit2401" target="_blank">GitHub</a>
+          <a href="#" target="_blank">LinkedIn</a>
+          <a href="#" target="_blank">Resume (PDF)</a>
+        </div>
+      </div>
+
+      <div class="hero-canvas-container">
+        <video id="bg-video" loop muted playsinline crossorigin="anonymous" src="/flower.mp4" style="display:none;"></video>
+        <canvas id="ascii-canvas"></canvas>
+        <div class="video-tooltip">
+          <strong>Source:</strong> <a href="https://pixabay.com/videos/flower-petals-cactus-flower-wind-56847/" target="_blank" style="color:var(--accent-sand)">Pixabay</a> <br/>
+          <em>Rendered live via custom WebGL ASCII shader.</em>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROJECTS SECTION -->
+  <main class="container">
+    <section class="projects">
+      <h2>Selected Work</h2>
+      
+      <div class="grid">
+        
+        <!-- Project Card 1: Ocean -->
+        <article class="card">
+          <video src="/ocean.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>Advanced Ocean Rendering System</h3>
+            <p>Engineered a performant water system using Gerstner wave mathematics, depth-based Beer's Law color absorption, and real-time intersection foam.</p>
+            <div class="tags">
+              <span>Shaders</span><span>GLSL/HLSL</span><span>Math</span>
+            </div>
+            <a href="/WaterGraphicsV2_Dissertation.pdf" target="_blank" class="action-btn">Read Dissertation (PDF)</a>
+          </div>
+        </article>
+
+        <!-- Project Card 2: ASCII -->
+        <article class="card">
+          <video src="/ascii-pipeline.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>WebGL ASCII Render Pipeline</h3>
+            <p>GPU-accelerated rendering pipeline with a live 3x3 Sobel operator for directional edge detection and temporal accumulation.</p>
+            <div class="tags">
+              <span>GLSL</span><span>WebGL</span><span>Three.js</span>
+            </div>
+            <a href="https://github.com/Abhijit2401/ascii-filter" class="action-btn">View on GitHub</a>
+          </div>
+        </article>
+
+        <!-- Project Card 3: 3D Portfolio -->
+        <article class="card">
+          <video src="/3d-portfolio.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>Interactive 3D WebGL Scene</h3>
+            <p>Developed a 3D scene graph rendering a dynamic environment with real-time lighting, custom procedural GLSL shaders, and a Rust ECS.</p>
+            <div class="tags">
+              <span>Astro</span><span>Three.js</span><span>Rust</span><span>GLSL</span>
+            </div>
+            <a href="https://github.com/Abhijit2401/Portfolio2026V1" class="action-btn">View on GitHub</a>
+          </div>
+        </article>
+
+        <!-- Project Card 4: Voxel -->
+        <article class="card">
+          <video src="/voxel.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>Procedural Voxel Engine</h3>
+            <p>Multithreaded C++ dungeon generator built in UE5, featuring O(1) AABB spatial querying to prevent topological overlaps.</p>
+            <div class="tags">
+              <span>C++</span><span>Unreal Engine 5</span>
+            </div>
+            <a href="/DissertationReport.pdf" target="_blank" class="action-btn">Read Report (PDF)</a>
+          </div>
+        </article>
+
+        <!-- Project Card 5: Uni Projects -->
+        <article class="card">
+          <video src="/gameplay.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>Revamped University Projects</h3>
+            <p>Remastered technical projects including an OpenGL spline-track offroading game with custom bloom, and an Advanced Games Tech "Souls-like" Action RPG.</p>
+            <div class="tags">
+              <span>C++</span><span>OpenGL</span><span>Custom Engine</span>
+            </div>
+            <a href="https://github.com/Abhijit2401/Abhijit-Shidlagatta-Final-Graphics-CW-Reuploaded" class="action-btn">View on GitHub</a>
+          </div>
+        </article>
+
+        <!-- Project Card 6: Game Jams -->
+        <article class="card">
+          <video src="/gmtk.mp4" autoplay loop muted playsinline class="card-media"></video>
+          <div class="card-body">
+            <h3>Indie Game Jams (GMTK)</h3>
+            <p>Developed multiple 2D and 3D titles across Unity and Godot under strict 48-hour deadlines, including the GMTK Game Jam. Handled C++/C# logic and custom shaders.</p>
+            <div class="tags">
+              <span>Unity & Godot</span><span>C++ & C#</span><span>Gameplay</span>
+            </div>
+            <a href="https://tijiboo.itch.io/" class="action-btn">Play on Itch.io</a>
+          </div>
+        </article>
+        
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style is:global>
+  :root {
+    --bg-dark: #1C1C1A; 
+    --bg-panel: #2A2A28; 
+    --text-main: #E8E5DF; 
+    --text-muted: #9E9D97; 
+    --accent-sage: #8A9A86; 
+    --accent-clay: #B67F6B; 
+    --accent-sand: #D4C9A8; 
+  }
+  body { background-color: var(--bg-dark); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+</style>
+
+<style>
+  .hero-wrapper { background-color: #000000; border-bottom: 1px solid #222; padding: 6rem 2rem; }
+  .hero-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 4rem; }
+  .hero-content { flex: 1; max-width: 550px; }
+  h1 { font-size: 3.5rem; margin: 0 0 0.5rem 0; letter-spacing: -0.02em; color: #fff; }
+  .subtitle { font-size: 1.2rem; color: var(--accent-sage); margin: 0 0 1.5rem 0; text-transform: uppercase; letter-spacing: 0.1em; }
+  .bio { font-size: 1.1rem; color: #aaa; line-height: 1.6; }
+  .links { display: flex; gap: 1.5rem; margin-top: 2rem; }
+  .links a { color: var(--accent-clay); text-decoration: none; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color 0.2s ease; }
+  .links a:hover { border-color: var(--accent-clay); }
+  .hero-canvas-container { position: relative; width: 520px; height: 380px; background: transparent; overflow: hidden; cursor: crosshair; }
+  #ascii-canvas { width: 100%; height: 100%; display: block; background: transparent; }
+  .video-tooltip { position: fixed; background: rgba(15, 15, 15, 0.95); color: #ccc; padding: 0.75rem 1rem; font-size: 0.8rem; border-radius: 6px; border: 1px solid #333; pointer-events: none; opacity: 0; z-index: 1000; transition: opacity 0.2s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.8); width: max-content; transform: translate(15px, 15px); }
+  .video-tooltip.visible { opacity: 1; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
+  h2 { font-size: 2rem; border-bottom: 1px solid #333; padding-bottom: 0.75rem; margin-bottom: 2.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+  .card { background-color: var(--bg-panel); border-radius: 12px; border: 1px solid #3d3d3a; transition: transform 0.2s ease, border-color 0.2s ease; display: flex; flex-direction: column; overflow: hidden; }
+  .card:hover { transform: translateY(-5px); border-color: var(--accent-sand); }
+  .card-media { width: 100%; height: 220px; object-fit: cover; background-color: #111; border-bottom: 1px solid #3d3d3a; }
+  .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+  .card h3 { margin: 0 0 0.8rem 0; color: var(--accent-sand); font-size: 1.4rem; }
+  .card p { color: var(--text-muted); line-height: 1.5; font-size: 0.95rem; margin-bottom: 1rem; flex-grow: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .tags span { background-color: #1a1a18; color: var(--accent-sage); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+  .action-btn { display: block; width: 100%; text-align: center; background-color: transparent; border: 1px solid var(--accent-sage); color: var(--accent-sage); padding: 0.75rem 0; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease; margin-top: auto; box-sizing: border-box; }
+  .action-btn:hover { background-color: var(--accent-sage); color: #111; }
+  @media (max-width: 900px) { .hero-container { flex-direction: column; } .hero-canvas-container { width: 100%; height: 300px; } }
+</style>
+
+<script>
+  class AsciiRenderPipelineLive {
+    canvas: HTMLCanvasElement;
+    gl: WebGLRenderingContext;
+    chars: string;
+    charsCount: number;
+    prog: WebGLProgram | null = null;
+    uniforms: Record<string, WebGLUniformLocation | null> = {};
+    atlasTex: WebGLTexture | null = null;
+    mediaTex: WebGLTexture | null = null;
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      this.gl = canvas.getContext('webgl', { preserveDrawingBuffer: false, alpha: true }) as WebGLRenderingContext;
+      this.chars = " .:-=+*#%@";
+      this.charsCount = this.chars.length;
+      this._initGL();
+    }
+
+    _compile(type: number, src: string): WebGLShader {
+      const gl = this.gl;
+      const sh = gl.createShader(type) as WebGLShader;
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.error(gl.getShaderInfoLog(sh)); }
+      return sh;
+    }
+
+    _generateAtlasTexture(): WebGLTexture {
+      const gl = this.gl;
+      const cvs = document.createElement('canvas');
+      const cellH = 64;
+      const cellW = Math.round(cellH * 0.55);
+      cvs.width = this.charsCount * cellW;
+      cvs.height = cellH;
+      const ctx = cvs.getContext('2d') as CanvasRenderingContext2D;
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${Math.floor(cellH * 0.8)}px 'Courier New', monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      for (let i = 0; i < this.charsCount; i++) {
+        ctx.fillText(this.chars[i], i * cellW + cellW / 2, cellH / 2 + cellH * 0.03);
+      }
+      const tex = gl.createTexture() as WebGLTexture;
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      return tex;
+    }
+
+    _initGL() {
+      const gl = this.gl;
+      const vertSrc = `attribute vec2 aPos; varying vec2 vUv; void main(){ vUv = aPos*0.5+0.5; gl_Position = vec4(aPos,0.0,1.0); }`;
+      const fragSrc = `precision mediump float;
+          varying vec2 vUv;
+          uniform sampler2D uMedia; uniform sampler2D uAtlas;
+          uniform float uCharsCount; uniform float uDensity; uniform float uFontAspect;
+          uniform vec2 uResolution; uniform vec2 uMediaResolution; 
+          uniform float uColorSteps; uniform vec3 uBgColor;
+          uniform float uTime; uniform float uZoom;
+          float lum(vec3 c){ return dot(c, vec3(0.299,0.587,0.114)); }
+          float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
+          float valueNoise(vec2 p) {
+              vec2 i = floor(p); vec2 f = fract(p);
+              float a = hash(i); float b = hash(i + vec2(1.0, 0.0));
+              float c = hash(i + vec2(0.0, 1.0)); float dd = hash(i + vec2(1.0, 1.0));
+              vec2 u = f * f * (3.0 - 2.0 * f);
+              return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (dd - b) * u.x * u.y;
+          }
+          void main(){
+              vec2 flippedUv = vec2(vUv.x, 1.0 - vUv.y);
+              float n1 = valueNoise(flippedUv * 3.0 + uTime * 0.2);
+              float n2 = valueNoise(flippedUv * 3.0 + vec2(5.2, 1.3) + uTime * 0.2);
+              vec2 warpUv = flippedUv + (vec2(n1, n2) - 0.5) * 0.8 * 0.05;
+              float aspect = uResolution.x/uResolution.y;
+              vec2 grid = vec2(uDensity, (uDensity/aspect)*uFontAspect);
+              vec2 cellScreenUv = floor(warpUv*grid)/grid;
+              vec2 scale = vec2(1.0);
+              float screenAspect = uResolution.x / uResolution.y;
+              float mediaAspect = uMediaResolution.x / uMediaResolution.y;
+              if (screenAspect > mediaAspect) { scale.y = (uResolution.y / uResolution.x) * mediaAspect; } 
+              else { scale.x = (uResolution.x / uResolution.y) / mediaAspect; }
+              scale /= uZoom; 
+              vec2 mediaUv = (cellScreenUv - 0.5) * scale + 0.5;
+              vec4 src = texture2D(uMedia, clamp(mediaUv, 0.0, 1.0));
+              float l = lum(src.rgb);
+              vec3 qColor = floor(src.rgb * uColorSteps + 0.5) / uColorSteps; 
+              float idx = floor(l*(uCharsCount-1.0)+0.5);
+              vec2 local = fract(warpUv*grid);
+              vec2 atlasUv = vec2((idx+local.x)/uCharsCount, local.y);
+              float a = texture2D(uAtlas, atlasUv).r;
+              vec3 finalColor = mix(uBgColor, qColor, a);
+              gl_FragColor = vec4(finalColor, 1.0);
+          }`;
+      const prog = gl.createProgram() as WebGLProgram;
+      gl.attachShader(prog, this._compile(gl.VERTEX_SHADER, vertSrc));
+      gl.attachShader(prog, this._compile(gl.FRAGMENT_SHADER, fragSrc));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+      this.prog = prog;
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'aPos');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      this.uniforms = {};
+      ['uMedia','uAtlas','uCharsCount','uDensity','uFontAspect','uResolution','uMediaResolution','uColorSteps','uBgColor','uTime','uZoom']
+          .forEach(name => { this.uniforms[name] = gl.getUniformLocation(prog, name); });
+      this.atlasTex = this._generateAtlasTexture();
+      this.mediaTex = gl.createTexture() as WebGLTexture;
+      gl.bindTexture(gl.TEXTURE_2D, this.mediaTex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+
+    updateVideoTexture(videoElement: HTMLVideoElement) {
+      const gl = this.gl;
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.mediaTex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoElement);
+    }
+
+    render(videoElement: HTMLVideoElement) {
+      const gl = this.gl;
+      const displayWidth = this.canvas.clientWidth;
+      const displayHeight = this.canvas.clientHeight;
+      if (this.canvas.width !== displayWidth || this.canvas.height !== displayHeight) {
+        this.canvas.width = displayWidth;
+        this.canvas.height = displayHeight;
+      }
+      gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+      gl.useProgram(this.prog);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.mediaTex);
+      gl.uniform1i(this.uniforms.uMedia, 0);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, this.atlasTex);
+      gl.uniform1i(this.uniforms.uAtlas, 1);
+      gl.uniform1f(this.uniforms.uCharsCount, this.charsCount);
+      gl.uniform1f(this.uniforms.uDensity, 75); 
+      gl.uniform1f(this.uniforms.uFontAspect, 0.55);
+      gl.uniform2f(this.uniforms.uResolution, this.canvas.width, this.canvas.height);
+      gl.uniform2f(this.uniforms.uMediaResolution, videoElement.videoWidth || 1, videoElement.videoHeight || 1);
+      gl.uniform1f(this.uniforms.uZoom, 1.0); 
+      gl.uniform1f(this.uniforms.uTime, performance.now() / 1000.0); 
+      gl.uniform1f(this.uniforms.uColorSteps, 12); 
+      gl.uniform3f(this.uniforms.uBgColor, 0, 0, 0); 
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('bg-video') as HTMLVideoElement | null;
+    const canvas = document.getElementById('ascii-canvas') as HTMLCanvasElement | null;
+    const container = document.querySelector('.hero-canvas-container') as HTMLElement | null;
+    const tooltip = document.querySelector('.video-tooltip') as HTMLElement | null;
+    
+    if (!video || !canvas || !container || !tooltip) return;
+
+    container.addEventListener('mousemove', (e) => {
+      tooltip.style.left = e.clientX + 'px';
+      tooltip.style.top = e.clientY + 'px';
+    });
+    container.addEventListener('mouseenter', () => { tooltip.classList.add('visible'); });
+    container.addEventListener('mouseleave', () => { tooltip.classList.remove('visible'); });
+
+    const widget = new AsciiRenderPipelineLive(canvas);
+
+    video.play().then(() => {
+      function loop() {
+        if (!video!.paused && !video!.ended) {
+          widget.updateVideoTexture(video!);
+          widget.render(video!);
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }).catch(err => {
+      console.warn("Autoplay blocked or flower.mp4 missing from public/ folder.", err);
+    });
+  });
+</script>
