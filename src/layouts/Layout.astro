@@ -4,6 +4,12 @@ interface Props {
 	description: string;
 }
 
+import '@fontsource/cinzel/latin-500.css';
+import '@fontsource/cinzel/latin-700.css';
+import '@fontsource/crimson-pro/latin-400.css';
+import '@fontsource/crimson-pro/latin-400-italic.css';
+import '@fontsource/crimson-pro/latin-600.css';
+
 const { title, description } = Astro.props;
 const ogImage = new URL('/video/ocean.jpg', Astro.site);
 ---
@@ -28,9 +34,33 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		<meta name="twitter:card" content="summary_large_image" />
 
 		<meta name="generator" content={Astro.generator} />
+		<script is:inline>
+			if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				document.documentElement.classList.add('motion');
+			}
+		</script>
 	</head>
 	<body>
 		<slot />
+		<script>
+			const items = document.querySelectorAll('[data-reveal]');
+			if (document.documentElement.classList.contains('motion') && 'IntersectionObserver' in window) {
+				const io = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('revealed');
+								io.unobserve(entry.target);
+							}
+						}
+					},
+					{ threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+				);
+				items.forEach((el) => io.observe(el));
+			} else {
+				items.forEach((el) => el.classList.add('revealed'));
+			}
+		</script>
 	</body>
 </html>
 
@@ -46,6 +76,8 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		--clay: #c18a75;
 		--sand: #d4c9a8;
 		--max: 1100px;
+		--head: 'Cinzel', Georgia, serif;
+		--body: 'Crimson Pro', Georgia, serif;
 	}
 
 	*,
@@ -68,9 +100,17 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		margin: 0;
 		background: var(--bg);
 		color: var(--text);
-		font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+		font-family: var(--body);
+		font-size: 1.25rem;
 		line-height: 1.6;
 		-webkit-font-smoothing: antialiased;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--head);
+		font-weight: 500;
 	}
 
 	a {
@@ -87,5 +127,18 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 	video {
 		max-width: 100%;
 		display: block;
+	}
+
+	.motion [data-reveal] {
+		opacity: 0;
+		transform: translateY(18px);
+		transition:
+			opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+			transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+	}
+
+	.motion [data-reveal].revealed {
+		opacity: 1;
+		transform: none;
 	}
 </style>

@@ -28,9 +28,9 @@ export const projects: Project[] = [
 		year: '2025-26',
 		featured: true,
 		paragraphs: [
-			'A dungeon crawler where you carve new rooms out of solid rock with a spell. When you cast it, the generator checks whether a room fits there, and if something is in the way it digs a tunnel through to the nearest existing cave instead.',
-			'Before carving, it builds a buffered AABB around the proposed room and asks the voxel octree whether anything inside it is already air. The carving loop runs on a worker thread through AsyncTask while holding a voxel write lock, then hands back to the game thread to spawn the enemies. That took the 1% low during room generation from 45.2 ms down to 17.1 ms.',
-			'Meshing is handled by the free Voxel Plugin (Marching Cubes). The generator, enemy state machines, shop and inventory are mine.',
+			'A dungeon crawler where you carve new rooms out of solid rock with a spell. If a room won\'t fit, the generator digs a tunnel through to the nearest cave instead.',
+			'A buffered AABB query on the voxel octree checks the space before carving. The carving runs on a worker thread through AsyncTask with a voxel write lock, taking the 1% low during room generation from 45.2 ms to 17.1 ms.',
+			'Meshing is by the free Voxel Plugin (Marching Cubes). The generator, enemy AI, shop and inventory are mine.',
 		],
 		tags: ['C++', 'Unreal Engine 5', 'Multithreading', 'Procedural generation'],
 		media: {

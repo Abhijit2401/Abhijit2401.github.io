@@ -4,15 +4,18 @@ import type { Project } from '../data/projects';
 interface Props {
 	project: Project;
 	flip?: boolean;
+	index?: number;
 }
 
-const { project, flip = false } = Astro.props;
+const { project, flip = false, index = 0 } = Astro.props;
 const { title, context, year, paragraphs, tags, media, links, featured } = project;
 ---
 
+<div class="snap-anchor" aria-hidden="true" style={`--i: ${index}`}></div>
 <article
-	class:list={['row', { flip, featured, 'no-media': !media }]}
+	class:list={['row', 'stack-card', { flip, featured, 'no-media': !media }]}
 	id={project.id}
+	style={`--i: ${index}`}
 >
 	{
 		media && (
@@ -83,6 +86,139 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 		box.addEventListener('focus', play);
 		box.addEventListener('blur', pause);
 	});
+
+	const cards = [...document.querySelectorAll<HTMLElement>('.stack-card')];
+	let ticking = false;
+
+	const fitCheck = () => {
+		const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+		cards.forEach((card, i) => {
+			const stickyTop = 5 * rem;
+			card.classList.toggle('no-stick', card.offsetHeight > window.innerHeight - stickyTop - 24);
+		});
+	};
+
+	const update = () => {
+		ticking = false;
+		cards.forEach((card, i) => {
+			const next = cards[i + 1];
+			if (!next || card.classList.contains('no-stick') || getComputedStyle(card).position !== 'sticky') {
+				card.style.transform = '';
+				card.style.filter = '';
+				card.style.opacity = '';
+				return;
+			}
+			const top = parseFloat(getComputedStyle(card).top) || 0;
+			const covered = (card.offsetHeight + top - next.getBoundingClientRect().top) / card.offsetHeight;
+			const p = Math.min(Math.max(covered, 0), 1);
+			const after = cards[i + 2];
+			const gone = after ? Math.min(Math.max((card.offsetHeight + top - after.getBoundingClientRect().top) / card.offsetHeight, 0), 1) : 0;
+			card.style.transform = `translateY(${-22 * p}px) scale(${1 - 0.05 * p})`;
+			card.style.filter = `brightness(${1 - 0.55 * p})`;
+			card.style.opacity = `${1 - gone}`;
+		});
+	};
+
+	const onScroll = () => {
+		if (!ticking) {
+			ticking = true;
+			requestAnimationFrame(update);
+		}
+	};
+
+	fitCheck();
+	update();
+	window.addEventListener('scroll', onScroll, { passive: true });
+	window.addEventListener('resize', () => {
+		fitCheck();
+		onScroll();
+	});
+
+	const anchors = [...document.querySelectorAll<HTMLElement>('.snap-anchor')];
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const pagingAllowed = () =>
+		window.matchMedia('(hover: hover) and (min-width: 861px)').matches &&
+		cards.every((c) => getComputedStyle(c).position === 'sticky');
+
+	const targets = () =>
+		anchors.map((a) => a.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(a).scrollMarginTop) || 0));
+
+	let animating = false;
+	let lastWheel = 0;
+
+	const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+	const slideTo = (y: number) => {
+		const start = window.scrollY;
+		const distance = y - start;
+		const duration = reduceMotion ? 350 : 750;
+		const t0 = performance.now();
+		animating = true;
+		document.documentElement.style.scrollBehavior = 'auto';
+		const step = (now: number) => {
+			const t = Math.min((now - t0) / duration, 1);
+			window.scrollTo(0, start + distance * ease(t));
+			if (t < 1) {
+				requestAnimationFrame(step);
+			} else {
+				animating = false;
+				document.documentElement.style.scrollBehavior = '';
+			}
+		};
+		requestAnimationFrame(step);
+	};
+
+	const pageTarget = (dir: number): number | null => {
+		const t = targets();
+		const y = window.scrollY;
+		const first = t[0];
+		const last = t[t.length - 1];
+		const entry = window.innerHeight * 0.45;
+		if (dir > 0) {
+			if (y < first - 4) return y + entry > first ? first : null;
+			if (y >= last - 4) return null;
+			return t.find((v) => v > y + 4) ?? null;
+		}
+		if (y > last + 4) return y - entry < last ? last : null;
+		if (y <= first + 4) return null;
+		return [...t].reverse().find((v) => v < y - 4) ?? null;
+	};
+
+	window.addEventListener(
+		'wheel',
+		(e) => {
+			if (!pagingAllowed() || e.ctrlKey) return;
+			const now = performance.now();
+			const quiet = now - lastWheel > 180;
+			lastWheel = now;
+			if (animating) {
+				e.preventDefault();
+				return;
+			}
+			const target = pageTarget(Math.sign(e.deltaY));
+			if (target === null) return;
+			e.preventDefault();
+			if (quiet || Math.abs(e.deltaY) > 40) slideTo(target);
+		},
+		{ passive: false }
+	);
+
+	window.addEventListener('keydown', (e) => {
+		if (!pagingAllowed() || e.altKey || e.ctrlKey || e.metaKey) return;
+		const tag = (e.target as HTMLElement).tagName;
+		if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+		const down = ['ArrowDown', 'PageDown', ' '].includes(e.key) && !e.shiftKey;
+		const up = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+		if (!down && !up) return;
+		if (animating) {
+			e.preventDefault();
+			return;
+		}
+		const target = pageTarget(down ? 1 : -1);
+		if (target === null) return;
+		e.preventDefault();
+		slideTo(target);
+	});
 </script>
 
 <style>
@@ -111,15 +247,40 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 
 	.row {
 		display: grid;
-		grid-template-columns: 1.45fr 1fr;
-		gap: 2.5rem;
+		grid-template-columns: 1.2fr 1fr;
+		gap: 2rem;
 		align-items: center;
-		padding: 3rem 0;
-		border-top: 1px solid var(--line);
+		padding: 1.75rem;
+		margin-bottom: 14vh;
+		background: var(--panel);
+		border: 1px solid var(--line);
+		border-radius: 18px;
+		box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+	}
+
+	.stack-card {
+		position: sticky;
+		top: 5rem;
+		transform-origin: 50% 0;
+		will-change: transform, filter;
+	}
+
+	.stack-card:last-child {
+		margin-bottom: 4rem;
+	}
+
+	.snap-anchor {
+		height: 0;
+		scroll-margin-top: 5rem;
+	}
+
+	.stack-card.no-stick {
+		position: relative;
+		top: auto;
 	}
 
 	.row.flip {
-		grid-template-columns: 1fr 1.45fr;
+		grid-template-columns: 1fr 1.2fr;
 	}
 
 	.row.flip .media {
@@ -127,15 +288,18 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 	}
 
 	.row.featured {
-		grid-template-columns: 1.7fr 1fr;
+		grid-template-columns: 1.1fr 1fr;
 	}
 
 	.row.featured.flip {
-		grid-template-columns: 1fr 1.7fr;
+		grid-template-columns: 1fr 1.1fr;
 	}
 
 	.row.no-media {
 		grid-template-columns: 1fr;
+	}
+
+	.row.no-media .body {
 		max-width: 720px;
 	}
 
@@ -155,22 +319,23 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 
 	.meta {
 		margin: 0 0 0.35rem;
-		font-size: 0.85rem;
+		font-size: 1rem;
 		color: var(--sage);
 		letter-spacing: 0.02em;
 	}
 
 	h3 {
 		margin: 0 0 0.9rem;
-		font-size: 1.6rem;
+		font-size: 1.75rem;
 		line-height: 1.2;
 		color: var(--sand);
 	}
 
 	.body p:not(.meta) {
-		margin: 0 0 0.9rem;
+		margin: 0 0 0.75rem;
 		color: var(--muted);
-		font-size: 0.98rem;
+		font-size: 1.12rem;
+		line-height: 1.5;
 	}
 
 	.tags {
@@ -183,7 +348,7 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 	}
 
 	.tags li {
-		font-size: 0.78rem;
+		font-size: 0.92rem;
 		font-weight: 600;
 		color: var(--sage);
 		background: var(--bg-deep);
@@ -211,10 +376,18 @@ const { title, context, year, paragraphs, tags, media, links, featured } = proje
 
 	@media (max-width: 860px) {
 		.row,
-		.row.featured {
+		.row.featured,
+		.row.flip,
+		.row.featured.flip {
 			grid-template-columns: 1fr;
 			gap: 1.4rem;
-			padding: 2.25rem 0;
+			padding: 1.25rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.stack-card {
+			position: relative;
+			top: auto;
 		}
 
 		.row.flip .media {
