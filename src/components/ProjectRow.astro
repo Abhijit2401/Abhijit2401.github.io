@@ -1,0 +1,224 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+	project: Project;
+	flip?: boolean;
+}
+
+const { project, flip = false } = Astro.props;
+const { title, context, year, paragraphs, tags, media, links, featured } = project;
+---
+
+<article
+	class:list={['row', { flip, featured, 'no-media': !media }]}
+	id={project.id}
+>
+	{
+		media && (
+			<div class="media hover-media" tabindex="0">
+				<video
+					class="hover-video"
+					src={media.video}
+					poster={media.poster}
+					aria-label={media.alt}
+					muted
+					loop
+					playsinline
+					preload="none"
+				/>
+				<span class="play-hint" aria-hidden="true">▶ Hover to play</span>
+			</div>
+		)
+	}
+
+	<div class="body">
+		<p class="meta">{context} <span aria-hidden="true">·</span> {year}</p>
+		<h3>{title}</h3>
+		{paragraphs.map((p) => <p>{p}</p>)}
+		<ul class="tags" aria-label="Tech used">
+			{tags.map((t) => <li>{t}</li>)}
+		</ul>
+		<div class="links">
+			{
+				links.map((l) => (
+					<a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+						{l.label} <span aria-hidden="true">→</span>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</article>
+
+<script>
+	const noHover = window.matchMedia('(hover: none)').matches;
+
+	document.querySelectorAll<HTMLElement>('.hover-media').forEach((box) => {
+		const video = box.querySelector('video');
+		if (!video) return;
+
+		const hint = box.querySelector('.play-hint');
+		if (hint && noHover) hint.textContent = '▶ Tap to play';
+
+		const play = () => {
+			video.preload = 'auto';
+			video.play().catch(() => {});
+			box.classList.add('playing');
+		};
+		const pause = () => {
+			video.pause();
+			box.classList.remove('playing');
+		};
+
+		box.addEventListener('pointerenter', (e) => {
+			if (e.pointerType === 'mouse') play();
+		});
+		box.addEventListener('pointerleave', (e) => {
+			if (e.pointerType === 'mouse') pause();
+		});
+		box.addEventListener('pointerup', (e) => {
+			if (e.pointerType !== 'mouse') (video.paused ? play() : pause());
+		});
+		box.addEventListener('focus', play);
+		box.addEventListener('blur', pause);
+	});
+</script>
+
+<style>
+	.hover-media {
+		position: relative;
+		cursor: pointer;
+	}
+
+	.play-hint {
+		position: absolute;
+		left: 0.75rem;
+		bottom: 0.75rem;
+		padding: 0.25rem 0.6rem;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--text);
+		background: rgba(18, 18, 17, 0.75);
+		pointer-events: none;
+		transition: opacity 0.2s ease;
+	}
+
+	.hover-media.playing .play-hint {
+		opacity: 0;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 1.45fr 1fr;
+		gap: 2.5rem;
+		align-items: center;
+		padding: 3rem 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.row.flip {
+		grid-template-columns: 1fr 1.45fr;
+	}
+
+	.row.flip .media {
+		order: 2;
+	}
+
+	.row.featured {
+		grid-template-columns: 1.7fr 1fr;
+	}
+
+	.row.featured.flip {
+		grid-template-columns: 1fr 1.7fr;
+	}
+
+	.row.no-media {
+		grid-template-columns: 1fr;
+		max-width: 720px;
+	}
+
+	.media {
+		border-radius: 10px;
+		overflow: hidden;
+		border: 1px solid var(--line);
+		background: var(--bg-deep);
+		aspect-ratio: 16 / 9;
+	}
+
+	.media video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.meta {
+		margin: 0 0 0.35rem;
+		font-size: 0.85rem;
+		color: var(--sage);
+		letter-spacing: 0.02em;
+	}
+
+	h3 {
+		margin: 0 0 0.9rem;
+		font-size: 1.6rem;
+		line-height: 1.2;
+		color: var(--sand);
+	}
+
+	.body p:not(.meta) {
+		margin: 0 0 0.9rem;
+		color: var(--muted);
+		font-size: 0.98rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		list-style: none;
+		padding: 0;
+		margin: 1.1rem 0 1.25rem;
+	}
+
+	.tags li {
+		font-size: 0.78rem;
+		font-weight: 600;
+		color: var(--sage);
+		background: var(--bg-deep);
+		border: 1px solid var(--line);
+		padding: 0.2rem 0.6rem;
+		border-radius: 999px;
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem 1.4rem;
+	}
+
+	.links a {
+		font-weight: 600;
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.15s ease;
+	}
+
+	.links a:hover {
+		border-color: currentColor;
+	}
+
+	@media (max-width: 860px) {
+		.row,
+		.row.featured {
+			grid-template-columns: 1fr;
+			gap: 1.4rem;
+			padding: 2.25rem 0;
+		}
+
+		.row.flip .media {
+			order: 0;
+		}
+	}
+</style>

@@ -1,0 +1,374 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import { projects } from '../data/projects';
+
+const links = [
+	{ label: 'GitHub', href: 'https://github.com/Abhijit2401' },
+	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/abhijit-shidlagatta/' },
+	{ label: 'itch.io', href: 'https://tijiboo.itch.io/' },
+	{ label: 'CV (PDF)', href: '/Abhijit_Shidlagatta_CV.pdf' },
+];
+
+const email = 'abhijit.shidlagatta@outlook.com';
+
+let mediaCount = 0;
+const rows = projects.map((project) => ({
+	project,
+	flip: project.media ? mediaCount++ % 2 === 1 : false,
+}));
+---
+
+<Layout
+	title="Abhijit Shidlagatta | Graphics & Gameplay Programmer"
+	description="Portfolio of Abhijit Shidlagatta: C++, Unreal Engine and GPU graphics work, including an FFT ocean and a destructible voxel dungeon."
+>
+	<header class="hero">
+		<div class="wrap">
+			<p class="eyebrow">Graphics &amp; gameplay programmer · C++ · Unreal · HLSL</p>
+			<h1>Abhijit Shidlagatta</h1>
+			<p class="intro">
+				I graduated from City St George's, University of London in 2026 with a 2:1 in Computer Science.
+				Most of what I build is real-time rendering and gameplay systems in C++ and Unreal Engine: an ocean
+				written from the compute shaders up, and a destructible voxel dungeon for my dissertation. I am based in London, UK, and I am looking for a graduate role in graphics programming or gameplay programming.
+			</p>
+			<p class="intro">
+				 (I also draw and learn art on the side, which has managed to help me a lot in game jams!)
+			</p>
+			<nav class="hero-links" aria-label="Contact and profiles">
+				<a class="primary" href={`mailto:${email}`}>{email}</a>
+				{links.map((l) => (
+					<a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label}</a>
+				))}
+			</nav>
+		</div>
+	</header>
+
+	<main class="wrap">
+		<section aria-labelledby="work-heading">
+			<h2 id="work-heading">Projects</h2>
+			{rows.map(({ project, flip }) => <ProjectRow project={project} flip={flip} />)}
+		</section>
+
+		<section class="sketchbook" aria-labelledby="art-heading">
+			<h2 id="art-heading">Sketchbook</h2>
+			<p class="art-intro">
+				I've been drawing on the side for years and I'm still learning. It came in useful at GMTK 2026:
+				every sprite in <a href="https://tijiboo.itch.io/sign-of-the-times" target="_blank" rel="noopener">Sign of the Times</a>{' '}is
+				mine, drawn in Piskel. Here's a loop from that game, some work from a PSX horror jam, and some sketches.
+			</p>
+
+			<h3 class="art-sub">Game art</h3>
+			<figure class="feature">
+				<video
+					class="lazy-video"
+					src="/art/gmtk-wisteria.mp4"
+					poster="/art/gmtk-wisteria.jpg"
+					aria-label="Pixel-art samurai walking through grass under a wisteria canopy with shafts of light"
+					muted
+					loop
+					playsinline
+					preload="none"
+				></video>
+				<figcaption>Sign of the Times (GMTK 2026). All the pixel art is mine, drawn in Piskel.</figcaption>
+			</figure>
+			<div class="art-grid pair">
+				<figure>
+					<img class="transparent" src="/art/hammer-swing.webp" alt="Hand-drawn first-person hammer swing animation" width="480" height="270" loading="lazy" />
+					<figcaption>First-person hammer swing for the PSX horror jam, drawn frame by frame in Krita.</figcaption>
+				</figure>
+				<figure>
+					<img class="blender" src="/art/angel-topology.jpg" alt="Wireframe of a winged angel character model in Blender" width="1060" height="900" loading="lazy" />
+					<figcaption>Angel enemy for the same jam, modelled and rigged in Blender. It was my first proper character model, so I'm still improving my topology.</figcaption>
+				</figure>
+			</div>
+
+			<h3 class="art-sub">Sketches</h3>
+			<div class="sketch-top">
+				<div class="sketch-stack">
+					<figure>
+						<img src="/art/malenia-vs-rowlet.jpg" alt="Sketch of Malenia from Elden Ring lunging at a small Rowlet" width="415" height="406" loading="lazy" />
+						<figcaption>Malenia vs Rowlet</figcaption>
+					</figure>
+					<figure>
+						<img src="/art/rowlet-reference.jpg" alt="Photo of a 3DS screen showing Rowlet facing Groudon" width="960" height="540" loading="lazy" />
+						<figcaption>The reference: Rowlet squaring up to Groudon on my 3DS</figcaption>
+					</figure>
+				</div>
+				<figure class="sketch-big">
+					<img src="/art/pokemon-sketches.jpg" alt="Sheet of Pokémon sketches drawn in Krita" width="802" height="776" loading="lazy" />
+					<figcaption>Pokémon sketches in Krita</figcaption>
+				</figure>
+			</div>
+			<div class="sketch-row">
+				<figure>
+					<img src="/art/genji.jpg" alt="Digital sketch of a masked cyborg ninja in profile" width="1000" height="760" loading="lazy" />
+					<figcaption>Genji (Overwatch)</figcaption>
+				</figure>
+				<figure>
+					<img src="/art/hollowknight.jpg" alt="Loose digital sketch of the Knight from Hollow Knight" width="1000" height="566" loading="lazy" />
+					<figcaption>Hollow Knight</figcaption>
+				</figure>
+				<figure>
+					<img src="/art/aespa.jpg" alt="Pencil portrait of a young woman with short hair" width="657" height="619" loading="lazy" />
+					<figcaption>Pencil portrait (aespa)</figcaption>
+				</figure>
+				<figure>
+					<img src="/art/friends-cat.jpg" alt="Pencil drawing of a black and white cat" width="593" height="646" loading="lazy" />
+					<figcaption>My friend's cat, in pencil</figcaption>
+				</figure>
+			</div>
+		</section>
+	</main>
+
+	<footer class="wrap">
+		<p>
+			<a href={`mailto:${email}`}>{email}</a>
+			<span aria-hidden="true"> · </span>
+			<a href="https://github.com/Abhijit2401" target="_blank" rel="noopener">GitHub</a>
+			<span aria-hidden="true"> · </span>
+			<a href="https://www.linkedin.com/in/abhijit-shidlagatta/" target="_blank" rel="noopener">LinkedIn</a>
+		</p>
+		<p class="small">© 2026 Abhijit Shidlagatta</p>
+	</footer>
+</Layout>
+
+<style>
+	.wrap {
+		max-width: var(--max);
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.hero {
+		background: var(--bg-deep);
+		border-bottom: 1px solid var(--line);
+		padding: 6.5rem 0 5rem;
+	}
+
+	.eyebrow {
+		margin: 0 0 0.75rem;
+		color: var(--sage);
+		font-size: 0.9rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		margin: 0 0 1.5rem;
+		font-size: clamp(2.4rem, 6vw, 4rem);
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		color: #fff;
+	}
+
+	.intro {
+		max-width: 44rem;
+		margin: 0 0 1rem;
+		font-size: 1.1rem;
+		color: var(--muted);
+	}
+
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		margin-top: 2rem;
+	}
+
+	.hero-links a {
+		font-weight: 600;
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+	}
+
+	.hero-links a:hover {
+		border-color: currentColor;
+	}
+
+	.hero-links a.primary {
+		color: var(--bg-deep);
+		background: var(--sand);
+		padding: 0.55rem 1rem;
+		border-radius: 6px;
+		border: none;
+	}
+
+	.hero-links a.primary:hover {
+		background: #fff;
+	}
+
+	main {
+		padding-top: 4rem;
+	}
+
+	h2 {
+		font-size: 1.1rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--sage);
+		margin: 0 0 0.5rem;
+	}
+
+	.sketchbook {
+		margin-top: 3rem;
+		padding-top: 3rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.art-intro {
+		max-width: 44rem;
+		color: var(--muted);
+		margin: 0.5rem 0 2rem;
+	}
+
+	.art-sub {
+		font-size: 1rem;
+		color: var(--sand);
+		margin: 2rem 0 1rem;
+	}
+
+	figure {
+		margin: 0;
+	}
+
+	figure img {
+		width: 100%;
+		height: auto;
+		border-radius: 8px;
+		border: 1px solid var(--line);
+		background: var(--bg-deep);
+	}
+
+	.feature {
+		max-width: 852px;
+		margin: 0 auto;
+	}
+
+	.feature video {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 426 / 240;
+		border-radius: 8px;
+		border: 1px solid var(--line);
+		background: var(--bg-deep);
+		image-rendering: pixelated;
+	}
+
+	.art-grid.pair {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+		margin-top: 1.25rem;
+		align-items: start;
+	}
+
+	.art-grid.pair img {
+		aspect-ratio: 4 / 3;
+		object-fit: contain;
+	}
+
+	img.blender {
+		background: #3d3d3d;
+	}
+
+	figure img.transparent {
+		background: transparent;
+		border-color: transparent;
+	}
+
+	.sketch-top {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.sketch-stack {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.sketch-row {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+		margin-top: 1rem;
+		align-items: start;
+	}
+
+	.sketch-row img {
+		background: none;
+	}
+
+	figcaption {
+		font-size: 0.8rem;
+		color: var(--muted);
+		margin-top: 0.45rem;
+	}
+
+	footer.wrap {
+		margin-top: 5rem;
+		padding-top: 2rem;
+		padding-bottom: 3rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+	}
+
+	footer p {
+		margin: 0 0 0.4rem;
+	}
+
+	footer a {
+		text-decoration: none;
+	}
+
+	.small {
+		font-size: 0.8rem;
+	}
+
+	@media (max-width: 860px) {
+		.hero {
+			padding: 4rem 0 3.5rem;
+		}
+
+	}
+
+	@media (max-width: 860px) {
+		.sketch-row {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 620px) {
+		.art-grid.pair,
+		.sketch-top {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<script>
+	const videos = document.querySelectorAll<HTMLVideoElement>('video.lazy-video');
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	if (!reduceMotion && 'IntersectionObserver' in window) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					const video = entry.target as HTMLVideoElement;
+					if (entry.isIntersecting) {
+						video.play().catch(() => {});
+					} else {
+						video.pause();
+					}
+				}
+			},
+			{ threshold: 0.35 }
+		);
+		videos.forEach((v) => observer.observe(v));
+	} else {
+		videos.forEach((v) => (v.controls = true));
+	}
+</script>
