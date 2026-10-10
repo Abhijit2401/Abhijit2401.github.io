@@ -116,7 +116,7 @@ export const projects: Project[] = [
 			'Sign of the Times was our GMTK 2026 entry: a Souls-like about an old warrior trying to reach a mountain memorial before their health timer runs out. I wrote the code with Nycto03 and drew every sprite myself in Piskel.',
 			'I also made a PSX-style horror game in Unity for another jam, where I hand-animated the first-person item animations in Krita.',
 		],
-		tags: ['Unity', 'C#', 'Pixel art', '48-hour jams'],
+		tags: ['Unity', 'C#', 'Pixel art', 'Game jams'],
 		media: {
 			video: '/video/sign-of-the-times.mp4',
 			poster: '/video/sign-of-the-times.jpg',

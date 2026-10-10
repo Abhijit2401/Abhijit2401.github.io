@@ -20,28 +20,39 @@ const rows = projects.map((project) => ({
 ---
 
 <Layout
-	title="Abhijit Shidlagatta | Graphics & Gameplay Programmer"
-	description="Portfolio of Abhijit Shidlagatta: C++, Unreal Engine and GPU graphics work, including an FFT ocean and a destructible voxel dungeon."
+	title="Abhijit Shidlagatta | C++ Programmer"
+	description="Portfolio of Abhijit Shidlagatta: real-time C++ work in games, graphics and simulation, including an FFT ocean and a destructible voxel dungeon."
 >
-	<header class="hero">
+	<nav class="topbar glass" aria-label="Sections">
+		<a class="mark" href="#top" aria-label="Back to top">
+			<img src="/art/doodles/chibi.webp" alt="" width="174" height="161" />
+		</a>
+		<a href="#projects">Projects</a>
+		<a href="#sketchbook">Sketchbook</a>
+		<a href="/Abhijit_Shidlagatta_CV.pdf">CV</a>
+	</nav>
+
+	<header class="hero" id="top">
+		<img class="doodle chick" src="/art/doodles/chick.webp" alt="" aria-hidden="true" width="242" height="286" loading="lazy" data-drift="0.12" />
 		<div class="wrap">
-			<p class="eyebrow" data-reveal style="--d: 0ms">Graphics &amp; gameplay programmer · C++ · Unreal · HLSL</p>
+			<img class="doodle portrait" src="/art/doodles/portrait.webp" alt="" aria-hidden="true" width="467" height="522" loading="lazy" data-drift="0.05" />
+			<p class="eyebrow" data-reveal style="--d: 0ms">C++ programmer · Real-time · Games · Graphics</p>
 			<h1 data-reveal style="--d: 80ms">Abhijit Shidlagatta</h1>
 			<details class="about" data-reveal style="--d: 160ms" open>
 				<summary>About me</summary>
 				<p class="intro">
 					I graduated from City St George's, University of London in 2026 with a 2:1 in Computer Science.
-					Most of what I build is real-time rendering and gameplay systems in C++ and Unreal Engine: an ocean
-					written from the compute shaders up, and a destructible voxel dungeon for my dissertation. I am based in London, UK, and I am looking for a graduate role in graphics programming or gameplay programming.
+					I like building things in C++ where performance matters: games, real-time graphics and simulation.
+					I'm looking for a graduate software role in London.
 				</p>
 				<p class="intro">
-					 (I also draw and learn art on the side, which has managed to help me a lot in game jams!)
+					I also draw, which comes in handy at game jams.
 				</p>
 			</details>
 			<nav class="hero-links" aria-label="Contact and profiles" data-reveal style="--d: 320ms">
 				<a class="primary" href={`mailto:${email}`}>{email}</a>
 				{links.map((l) => (
-					<a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label}</a>
+					<a class="glass" href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label}</a>
 				))}
 			</nav>
 		</div>
@@ -50,12 +61,56 @@ const rows = projects.map((project) => ({
 	<main class="wrap" id="projects">
 		<section aria-labelledby="work-heading">
 			<h2 id="work-heading" data-reveal>Projects</h2>
-			{rows.map(({ project, flip }, i) => <ProjectRow project={project} flip={flip} index={i} />)}
+			{
+				rows.map(({ project, flip }) =>
+					project.id === 'voxel-dungeon' ? (
+						<div class="perch">
+							<img class="cat cat-back" src="/art/doodles/cat.webp" alt="" aria-hidden="true" width="400" height="671" data-reveal />
+							<ProjectRow project={project} flip={flip} />
+							<img class="cat cat-front" src="/art/doodles/cat.webp" alt="" aria-hidden="true" width="400" height="671" data-reveal />
+						</div>
+					) : project.id === 'fft-ocean' ? (
+						<div class="dock harbour">
+							<ProjectRow project={project} flip={flip} />
+							<img class="ship" src="/art/doodles/ship.webp" alt="" aria-hidden="true" width="720" height="291" loading="lazy" data-reveal />
+						</div>
+					) : project.id === 'ascii-filter' ? (
+						<div class="dock">
+							<ProjectRow project={project} flip={flip} />
+							<img class="doodle alien" src="/art/doodles/alien.webp" alt="" aria-hidden="true" width="720" height="504" loading="lazy" data-drift="0.06" />
+						</div>
+					) : project.id === 'opengl-racer' ? (
+						<div class="dock">
+							<ProjectRow project={project} flip={flip} />
+							<img class="doodle star" src="/art/doodles/star.webp" alt="" aria-hidden="true" width="572" height="256" loading="lazy" data-drift="0.1" />
+						</div>
+					) : (
+						<ProjectRow project={project} flip={flip} />
+					)
+				)
+			}
 		</section>
+
+		<section class="building" aria-labelledby="building-heading" data-reveal>
+			<p class="building-label" id="building-heading">Currently building</p>
+			<h3>Moss</h3>
+			<p>
+				My own small game engine in C++ and Vulkan, written from scratch. I'm using it to make a game for
+				GitHub Game Off in November.
+			</p>
+			<ul class="building-tags">
+				<li>C++</li>
+				<li>Vulkan</li>
+				<li>In progress</li>
+			</ul>
+		</section>
+		<img class="doodle bug" src="/art/doodles/bug.webp" alt="" aria-hidden="true" width="197" height="164" loading="lazy" data-drift="0.08" />
 	</main>
 
 	<div class="dark-zone">
-		<section class="sketchbook wrap" aria-labelledby="art-heading">
+		<section class="sketchbook wrap" id="sketchbook" aria-labelledby="art-heading">
+			<img class="doodle plant" src="/art/doodles/plant.webp" alt="" aria-hidden="true" width="522" height="640" loading="lazy" data-drift="0.04" />
+			<img class="doodle face" src="/art/doodles/face.webp" alt="" aria-hidden="true" width="333" height="390" loading="lazy" data-drift="0.04" />
 			<h2 id="art-heading" data-reveal>Sketchbook</h2>
 			<p class="art-intro" data-reveal>
 				I've been drawing on the side for years and I'm still learning. It came in useful at GMTK 2026:
@@ -126,6 +181,7 @@ const rows = projects.map((project) => ({
 		</section>
 
 	<footer class="wrap">
+		<img class="doodle hedgehog" src="/art/doodles/hedgehog.webp" alt="" aria-hidden="true" width="533" height="383" loading="lazy" />
 		<p>
 			<a href={`mailto:${email}`}>{email}</a>
 			<span aria-hidden="true"> · </span>
@@ -145,27 +201,71 @@ const rows = projects.map((project) => ({
 		padding: 0 1.5rem;
 	}
 
+	.topbar {
+		position: fixed;
+		top: 0.9rem;
+		left: 50%;
+		translate: -50% 0;
+		z-index: 50;
+		display: flex;
+		align-items: center;
+		gap: 0.15rem;
+		padding: 0.3rem;
+		border-radius: 999px;
+		--glass-fill: 0.3;
+		--glass-blur: 6px;
+	}
+
+	.topbar a {
+		flex: none;
+		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		padding: 0.4rem 0.9rem;
+		border-radius: 999px;
+		font-size: 0.9rem;
+		font-weight: 550;
+		color: var(--text);
+		text-decoration: none;
+		transition: background-color 0.2s ease;
+	}
+
+	.topbar a:hover {
+		background: color-mix(in srgb, var(--text) 8%, transparent);
+	}
+
+	.topbar .mark {
+		padding: 0.1rem;
+	}
+
+	.topbar .mark img {
+		flex: none;
+		width: 2.3rem;
+		height: 2.3rem;
+		padding: 0.1rem;
+		border-radius: 50%;
+		object-fit: contain;
+		background: #fff;
+		box-shadow: 0 0 0 1px var(--glass-border);
+		transition: rotate 0.3s var(--ease);
+	}
+
+	.topbar .mark:hover img {
+		rotate: -10deg;
+	}
+
+	#top,
+	#projects,
+	#sketchbook {
+		scroll-margin-top: 4.5rem;
+	}
+
+	#top {
+		scroll-margin-top: 0;
+	}
+
 	.hero {
-		background: var(--bg-deep);
-		border-bottom: 1px solid var(--line);
-		padding: 6.5rem 0 5rem;
-	}
-
-	.eyebrow {
-		margin: 0 0 0.9rem;
-		color: var(--sage);
-		font-family: var(--head);
-		font-size: 0.95rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-
-	h1 {
-		margin: 0 0 1.5rem;
-		font-size: clamp(2.6rem, 6.5vw, 4.6rem);
-		line-height: 1.08;
-		letter-spacing: 0.01em;
-		color: #fff;
+		padding: 8rem 0 4.5rem;
 	}
 
 	.hero .wrap {
@@ -174,10 +274,43 @@ const rows = projects.map((project) => ({
 		align-items: flex-start;
 	}
 
+	.eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin: 0 0 1.4rem;
+		font-family: var(--mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+	.eyebrow::before {
+		content: '';
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 50%;
+		background: var(--accent);
+		box-shadow: 0 0 12px var(--accent);
+	}
+
+	h1 {
+		margin: 0 0 1.75rem;
+		font-size: clamp(2.8rem, 8vw, 5.6rem);
+		line-height: 1;
+		background: linear-gradient(180deg, var(--heading) 30%, color-mix(in srgb, var(--heading) 60%, var(--accent)));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		padding-bottom: 0.08em;
+	}
+
 	.intro {
-		max-width: 46rem;
+		max-width: 42rem;
 		margin: 0 0 1rem;
-		font-size: 1.35rem;
+		font-size: 1.2rem;
+		line-height: 1.65;
 		color: var(--muted);
 	}
 
@@ -185,7 +318,47 @@ const rows = projects.map((project) => ({
 		display: none;
 	}
 
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		margin-top: 2rem;
+	}
+
+	.hero-links a {
+		font-size: 0.95rem;
+		font-weight: 550;
+		text-decoration: none;
+		color: var(--text);
+		padding: 0.6rem 1.1rem;
+		border-radius: 999px;
+		box-shadow: inset 0 1px 0 var(--glass-highlight);
+		transition: border-color 0.2s ease;
+	}
+
+	.hero-links a:hover {
+		border-color: color-mix(in srgb, var(--accent) 50%, var(--glass-border));
+	}
+
+	.hero-links a.primary {
+		color: var(--on-accent);
+		background: var(--accent);
+		border: 1px solid transparent;
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.4),
+			0 8px 30px color-mix(in srgb, var(--accent) 35%, transparent);
+	}
+
+	.hero-links a.primary:hover {
+		background: color-mix(in srgb, var(--accent) 85%, white);
+	}
+
 	@media (max-width: 860px) {
+		.hero {
+			padding: 6rem 0 3rem;
+		}
+
 		.hero-links {
 			order: 3;
 		}
@@ -194,7 +367,7 @@ const rows = projects.map((project) => ({
 			order: 4;
 			width: 100%;
 			margin-top: 1.75rem;
-			border-top: 1px solid var(--line);
+			border-top: 1px solid var(--glass-border);
 			padding-top: 1rem;
 			interpolate-size: allow-keywords;
 		}
@@ -206,9 +379,9 @@ const rows = projects.map((project) => ({
 			cursor: pointer;
 			list-style: none;
 			font-family: var(--head);
+			font-weight: var(--head-weight);
 			font-size: 1.15rem;
-			color: var(--sand);
-			letter-spacing: 0.04em;
+			color: var(--heading);
 			padding: 0.4rem 0;
 		}
 
@@ -219,7 +392,7 @@ const rows = projects.map((project) => ({
 		.about summary::after {
 			content: '+';
 			font-size: 1.5rem;
-			color: var(--clay);
+			color: var(--accent);
 			transition: transform 0.3s ease;
 		}
 
@@ -244,64 +417,110 @@ const rows = projects.map((project) => ({
 		}
 
 		.intro {
-			font-size: 1.2rem;
+			font-size: 1.08rem;
 		}
 	}
 
-	.hero-links {
+	main {
+		padding-top: 3rem;
+	}
+
+	.building {
+		margin-top: 3rem;
+		padding: 1.5rem 1.75rem;
+		border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--glass-border));
+		border-radius: var(--radius-sm);
+		max-width: 42rem;
+	}
+
+	.building-label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin: 0 0 0.5rem;
+		font-family: var(--mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+
+	.building-label::before {
+		content: '';
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 50%;
+		background: var(--accent);
+		box-shadow: 0 0 12px var(--accent);
+	}
+
+	.building h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.5rem;
+	}
+
+	.building p {
+		margin: 0 0 1rem;
+		color: var(--muted);
+	}
+
+	.building-tags {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem 1.5rem;
-		margin-top: 2rem;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.hero-links a {
-		font-weight: 600;
-		text-decoration: none;
-		border-bottom: 1px solid transparent;
-	}
-
-	.hero-links a:hover {
-		border-color: currentColor;
-	}
-
-	.hero-links a.primary {
-		color: var(--bg-deep);
-		background: var(--sand);
-		padding: 0.55rem 1rem;
-		border-radius: 6px;
-		border: none;
-	}
-
-	.hero-links a.primary:hover {
-		background: #fff;
-	}
-
-	main {
-		padding-top: 5.5rem;
+	.building-tags li {
+		font-family: var(--mono);
+		font-size: 0.75rem;
+		padding: 0.3rem 0.65rem;
+		border-radius: 999px;
+		border: 1px solid var(--glass-border);
+		color: var(--text);
 	}
 
 	h2 {
 		font-size: clamp(2rem, 4.5vw, 3rem);
-		letter-spacing: 0.04em;
-		color: var(--sand);
-		margin: 0 0 2.5rem;
+		line-height: 1.1;
+		margin: 0 0 2.25rem;
 	}
 
 	h2::after {
 		content: '';
 		display: block;
-		width: 3.5rem;
-		height: 2px;
-		margin-top: 0.8rem;
-		background: var(--clay);
+		width: 4.6em;
+		height: 0.45em;
+		margin-top: 0.25rem;
+		background: linear-gradient(90deg, var(--accent), var(--accent-2));
+		-webkit-mask: url('/art/doodles/underline-1.webp') center / 100% 100% no-repeat;
+		mask: url('/art/doodles/underline-1.webp') center / 100% 100% no-repeat;
+	}
+
+	.sketchbook > h2::after {
+		width: 5.6em;
+		height: 0.35em;
+		-webkit-mask-image: url('/art/doodles/underline-2.webp');
+		mask-image: url('/art/doodles/underline-2.webp');
 	}
 
 	.dark-zone {
-		background: var(--bg-deep);
-		border-top: 1px solid var(--line);
-		margin-top: 2rem;
+		position: relative;
+		margin-top: 3rem;
+		background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-deep) 85%, transparent) 12rem);
+	}
+
+	.dark-zone::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: min(var(--max), 100% - 3rem);
+		height: 1px;
+		translate: -50% 0;
+		background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
 	}
 
 	.sketchbook {
@@ -309,27 +528,28 @@ const rows = projects.map((project) => ({
 	}
 
 	.art-intro {
-		max-width: 46rem;
+		max-width: 42rem;
 		color: var(--muted);
 		margin: 0 0 2rem;
 	}
 
 	.art-sub {
-		font-size: 1.35rem;
-		color: var(--sand);
-		margin: 2.75rem 0 1.1rem;
+		font-size: 1.3rem;
+		margin: 3rem 0 1.1rem;
 	}
 
 	figure {
 		margin: 0;
 	}
 
-	figure img {
+	figure img,
+	.feature video {
 		width: 100%;
 		height: auto;
-		border-radius: 8px;
-		border: 1px solid var(--line);
-		background: var(--bg-deep);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--glass-border);
+		background: rgba(var(--glass-tint), var(--glass-fill));
+		box-shadow: var(--shadow);
 	}
 
 	.feature {
@@ -338,12 +558,7 @@ const rows = projects.map((project) => ({
 	}
 
 	.feature video {
-		width: 100%;
-		height: auto;
 		aspect-ratio: 426 / 240;
-		border-radius: 8px;
-		border: 1px solid var(--line);
-		background: var(--bg-deep);
 		image-rendering: pixelated;
 	}
 
@@ -367,6 +582,7 @@ const rows = projects.map((project) => ({
 	figure img.transparent {
 		background: transparent;
 		border-color: transparent;
+		box-shadow: none;
 	}
 
 	.sketch-top {
@@ -389,21 +605,25 @@ const rows = projects.map((project) => ({
 		align-items: start;
 	}
 
-	.sketch-row img {
-		background: none;
+	figure img {
+		transition: translate 0.4s var(--ease);
+	}
+
+	figure:hover img:not(.transparent) {
+		translate: 0 -3px;
 	}
 
 	figcaption {
-		font-size: 1rem;
+		font-size: 0.85rem;
+		line-height: 1.5;
 		color: var(--muted);
-		margin-top: 0.45rem;
+		margin-top: 0.6rem;
 	}
 
 	footer.wrap {
-		margin-top: 5rem;
 		padding-top: 2rem;
 		padding-bottom: 3rem;
-		border-top: 1px solid var(--line);
+		border-top: 1px solid var(--glass-border);
 		color: var(--muted);
 	}
 
@@ -415,15 +635,14 @@ const rows = projects.map((project) => ({
 		text-decoration: none;
 	}
 
-	.small {
-		font-size: 0.8rem;
+	footer a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 
-	@media (max-width: 860px) {
-		.hero {
-			padding: 4rem 0 3.5rem;
-		}
-
+	.small {
+		font-family: var(--mono);
+		font-size: 0.75rem;
 	}
 
 	@media (max-width: 860px) {
@@ -436,6 +655,232 @@ const rows = projects.map((project) => ({
 		.art-grid.pair,
 		.sketch-top {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	.hero .wrap,
+	main.wrap,
+	.sketchbook,
+	footer.wrap {
+		position: relative;
+	}
+
+	.doodle {
+		position: absolute;
+		z-index: 1;
+		height: auto;
+		rotate: var(--tilt, 0deg);
+		user-select: none;
+		-webkit-user-drag: none;
+	}
+
+	.motion .doodle:hover {
+		animation: wobble 0.7s var(--ease);
+	}
+
+	@keyframes wobble {
+		30% {
+			transform: rotate(-7deg) scale(1.05);
+		}
+		60% {
+			transform: rotate(5deg) scale(1.05);
+		}
+	}
+
+	.motion .chick {
+		animation: bob 5s ease-in-out infinite;
+	}
+
+	@keyframes bob {
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	.portrait {
+		top: 2.5rem;
+		right: 2.5rem;
+		width: 190px;
+		--tilt: 5deg;
+	}
+
+	.hero {
+		position: relative;
+	}
+
+	.chick {
+		top: 1.25rem;
+		left: max(1.5rem, 50% - var(--max) / 2 - 6rem);
+		width: 80px;
+		--tilt: -8deg;
+	}
+
+	.bug {
+		top: 22%;
+		left: -9.5rem;
+		width: 105px;
+		--tilt: -12deg;
+	}
+
+	.star {
+		top: 30%;
+		right: calc(100% + 2rem);
+		width: 175px;
+		--tilt: -8deg;
+	}
+
+	.plant {
+		top: 1rem;
+		left: calc(50% - 50vw - 1.25rem);
+		width: clamp(150px, 20vw, 320px);
+		--tilt: -5deg;
+	}
+
+	.sketchbook > h2,
+	.art-intro {
+		margin-left: auto;
+	}
+
+	.sketchbook > h2 {
+		text-align: right;
+	}
+
+	.sketchbook > h2::after {
+		margin-left: auto;
+	}
+
+	.hedgehog {
+		bottom: calc(100% - 0.6rem);
+		right: 2rem;
+		width: 190px;
+		z-index: 0;
+	}
+
+	footer.wrap {
+		margin-top: 10rem;
+	}
+
+	.perch {
+		position: relative;
+		--cat-w: 185px;
+		--ledge: calc(var(--cat-w) * 671 / 400 * 0.25);
+	}
+
+	.cat {
+		position: absolute;
+		left: 30%;
+		top: calc(-1 * var(--ledge));
+		width: var(--cat-w);
+		height: auto;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.cat-back {
+		clip-path: inset(var(--ledge) 0 0 0);
+		filter: brightness(0.15) contrast(1.4);
+		opacity: 0.85;
+	}
+
+	.cat-front {
+		-webkit-mask-image: linear-gradient(#000 calc(var(--ledge) + 1rem), transparent calc(var(--ledge) + 2rem));
+		mask-image: linear-gradient(#000 calc(var(--ledge) + 1rem), transparent calc(var(--ledge) + 2rem));
+	}
+
+
+
+	.dock {
+		position: relative;
+	}
+
+	.ship {
+		position: absolute;
+		right: 10%;
+		top: 0.4rem;
+		width: 250px;
+		height: auto;
+		z-index: 1;
+		pointer-events: none;
+		transform-origin: 50% 80%;
+	}
+
+	.motion .ship {
+		animation: rock 4s ease-in-out infinite;
+	}
+
+	@keyframes rock {
+		0%,
+		100% {
+			transform: rotate(-2deg) translateY(0);
+		}
+		50% {
+			transform: rotate(2deg) translateY(-3px);
+		}
+	}
+
+	.face {
+		top: 0.5rem;
+		right: calc(50% - 50vw - 1rem);
+		width: clamp(150px, 13vw, 230px);
+		--tilt: 6deg;
+	}
+
+	.alien {
+		top: 20%;
+		left: calc(100% + 1rem);
+		width: clamp(175px, 13vw, 260px);
+		--tilt: 5deg;
+	}
+	@media (max-width: 1440px) {
+		.bug,
+		.star,
+		.alien,
+		.face {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.portrait,
+		.chick {
+			display: none;
+		}
+	}
+
+	@media (max-width: 860px) {
+		.plant {
+			width: 112px;
+			left: calc(50% - 50vw - 0.4rem);
+			top: 0.5rem;
+		}
+
+		.perch {
+			--cat-w: 130px;
+		}
+
+		.cat {
+			left: auto;
+			right: 12%;
+		}
+
+		.hedgehog {
+			width: 130px;
+			right: 1rem;
+		}
+
+		.harbour {
+			margin-top: 3rem;
+		}
+
+		.ship {
+			width: 170px;
+			right: 6%;
+			top: auto;
+			bottom: calc(100% - 2.1rem);
+		}
+
+		footer.wrap {
+			margin-top: 8rem;
 		}
 	}
 </style>
@@ -469,5 +914,27 @@ const rows = projects.map((project) => ({
 		videos.forEach((v) => observer.observe(v));
 	} else {
 		videos.forEach((v) => (v.controls = true));
+	}
+	const drifters = [...document.querySelectorAll<HTMLElement>('[data-drift]')];
+	if (!reduceMotion && drifters.length) {
+		let queued = false;
+		const drift = () => {
+			queued = false;
+			for (const el of drifters) {
+				const top = el.parentElement!.getBoundingClientRect().top;
+				el.style.translate = `0 ${(top * Number(el.dataset.drift)).toFixed(1)}px`;
+			}
+		};
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (!queued) {
+					queued = true;
+					requestAnimationFrame(drift);
+				}
+			},
+			{ passive: true }
+		);
+		drift();
 	}
 </script>

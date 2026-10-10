@@ -4,14 +4,12 @@ interface Props {
 	description: string;
 }
 
-import '@fontsource/cinzel/latin-500.css';
-import '@fontsource/cinzel/latin-700.css';
-import '@fontsource/crimson-pro/latin-400.css';
-import '@fontsource/crimson-pro/latin-400-italic.css';
-import '@fontsource/crimson-pro/latin-600.css';
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 
 const { title, description } = Astro.props;
-const ogImage = new URL('/video/ocean.jpg', Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
 ---
 
 <!doctype html>
@@ -24,13 +22,17 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		<meta name="author" content="Abhijit Shidlagatta" />
 		<link rel="canonical" href={Astro.url} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="theme-color" content="#f3f4f8" />
 
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={Astro.url} />
 		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Abhijit Shidlagatta, C++ programmer" />
 		<meta name="twitter:card" content="summary_large_image" />
 
 		<meta name="generator" content={Astro.generator} />
@@ -41,6 +43,7 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		</script>
 	</head>
 	<body>
+		<div class="ambient" aria-hidden="true"><span></span><span></span><span></span></div>
 		<slot />
 		<script>
 			const items = document.querySelectorAll('[data-reveal]');
@@ -61,23 +64,102 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 				items.forEach((el) => el.classList.add('revealed'));
 			}
 		</script>
+		<script>
+			const chromium = (navigator as any).userAgentData?.brands?.some((b: { brand: string }) => b.brand === 'Chromium');
+			const panes = [...document.querySelectorAll<HTMLElement>('.topbar')];
+
+			if (chromium && panes.length) {
+				const ns = 'http://www.w3.org/2000/svg';
+				const defs = document.createElementNS(ns, 'svg');
+				defs.setAttribute('aria-hidden', 'true');
+				defs.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+				document.body.append(defs);
+
+				const map = (w: number, h: number, bevel: number, axis: 'x' | 'y') => {
+					const len = axis === 'x' ? w : h;
+					const f = bevel / len;
+					const c = (v: number) => (axis === 'x' ? `rgb(${v},128,128)` : `rgb(128,${v},128)`);
+					const [x2, y2] = axis === 'x' ? [w, 0] : [0, h];
+					const svg =
+						`<svg xmlns="${ns}" width="${w}" height="${h}">` +
+						`<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="${x2}" y2="${y2}">` +
+						`<stop offset="0" stop-color="${c(255)}"/><stop offset="${f * 0.35}" stop-color="${c(168)}"/>` +
+						`<stop offset="${f}" stop-color="${c(128)}"/><stop offset="${1 - f}" stop-color="${c(128)}"/>` +
+						`<stop offset="${1 - f * 0.35}" stop-color="${c(88)}"/><stop offset="1" stop-color="${c(0)}"/>` +
+						`</linearGradient><rect width="100%" height="100%" fill="url(#g)"/></svg>`;
+					return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+				};
+
+				const build = (el: HTMLElement, id: string) => {
+					const w = Math.round(el.offsetWidth);
+					const h = Math.round(el.offsetHeight);
+					if (!w || !h) return;
+					const bevel = Math.min(26, w / 3, h / 3);
+					const scale = Math.round(bevel * 1.4);
+					const blurVar = parseFloat(getComputedStyle(el).getPropertyValue('--glass-blur'));
+					const blur = Number.isNaN(blurVar) ? 14 : blurVar;
+					let filter = defs.querySelector<SVGFilterElement>(`#${id}`);
+					if (!filter) {
+						filter = document.createElementNS(ns, 'filter');
+						filter.id = id;
+						defs.append(filter);
+					}
+					for (const [k, v] of Object.entries({
+						x: -40, y: -40, width: w + 80, height: h + 80,
+						filterUnits: 'userSpaceOnUse', primitiveUnits: 'userSpaceOnUse',
+						'color-interpolation-filters': 'sRGB',
+					})) filter.setAttribute(k, String(v));
+					filter.innerHTML =
+						`<feImage href="${map(w, h, bevel, 'x')}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="mx"/>` +
+						`<feImage href="${map(w, h, bevel, 'y')}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="my"/>` +
+						`<feDisplacementMap in="SourceGraphic" in2="mx" scale="${scale}" xChannelSelector="R" yChannelSelector="G" result="a"/>` +
+						`<feDisplacementMap in="a" in2="my" scale="${scale}" xChannelSelector="R" yChannelSelector="G" result="b"/>` +
+						`<feGaussianBlur in="b" stdDeviation="${blur}" edgeMode="duplicate"/>` +
+						`<feColorMatrix type="saturate" values="1.8"/>`;
+					el.style.backdropFilter = `url(#${id})`;
+				};
+
+				const ids = new Map(panes.map((el, i) => [el, `lg-${i}`]));
+				const ro = new ResizeObserver((entries) => {
+					for (const e of entries) build(e.target as HTMLElement, ids.get(e.target as HTMLElement)!);
+				});
+				panes.forEach((el) => ro.observe(el));
+			}
+		</script>
 	</body>
 </html>
 
 <style is:global>
 	:root {
-		--bg: #1c1c1a;
-		--bg-deep: #121211;
-		--panel: #2a2a28;
-		--line: #3d3d3a;
-		--text: #e8e5df;
-		--muted: #a3a29b;
-		--sage: #8a9a86;
-		--clay: #c18a75;
-		--sand: #d4c9a8;
+		color-scheme: light;
 		--max: 1100px;
-		--head: 'Cinzel', Georgia, serif;
-		--body: 'Crimson Pro', Georgia, serif;
+		--radius: 24px;
+		--radius-sm: 16px;
+		--ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+		--head: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+		--body: 'Geist Variable', system-ui, sans-serif;
+		--mono: 'Geist Mono Variable', ui-monospace, monospace;
+		--head-weight: 650;
+		--head-track: -0.03em;
+
+		--bg: #f3f4f8;
+		--bg-deep: #e8eaf1;
+		--text: #14161c;
+		--heading: #0b0c10;
+		--muted: #5b6170;
+		--accent: #2563eb;
+		--accent-2: #9333ea;
+		--on-accent: #ffffff;
+		--glow-1: rgba(125, 211, 252, 0.55);
+		--glow-2: rgba(196, 181, 253, 0.55);
+		--glow-3: rgba(253, 186, 160, 0.5);
+		--glass-tint: 255, 255, 255;
+		--glass-fill: 0.16;
+		--glass-blur: 14px;
+		--glass-border: rgba(255, 255, 255, 0.55);
+		--glass-highlight: rgba(255, 255, 255, 0.95);
+		--spot: rgba(255, 255, 255, 0.55);
+		--shadow: 0 20px 50px rgba(30, 40, 80, 0.12);
 	}
 
 	*,
@@ -88,6 +170,7 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 
 	html {
 		scroll-behavior: smooth;
+		accent-color: var(--accent);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -98,28 +181,80 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 
 	body {
 		margin: 0;
+		overflow-x: clip;
 		background: var(--bg);
 		color: var(--text);
 		font-family: var(--body);
-		font-size: 1.25rem;
-		line-height: 1.6;
+		font-size: 1.125rem;
+		line-height: 1.65;
 		-webkit-font-smoothing: antialiased;
+		transition:
+			background-color 0.4s ease,
+			color 0.4s ease;
+	}
+
+	::selection {
+		background: var(--accent);
+		color: var(--on-accent);
+	}
+
+	.ambient {
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.ambient span {
+		position: absolute;
+		width: 60vmax;
+		height: 60vmax;
+		border-radius: 50%;
+	}
+
+	.ambient span:nth-child(1) {
+		top: -25vmax;
+		left: -15vmax;
+		background: radial-gradient(circle, var(--glow-1), transparent 70%);
+	}
+
+	.ambient span:nth-child(2) {
+		top: 10vh;
+		right: -25vmax;
+		background: radial-gradient(circle, var(--glow-2), transparent 70%);
+	}
+
+	.ambient span:nth-child(3) {
+		bottom: -30vmax;
+		left: 20vw;
+		background: radial-gradient(circle, var(--glow-3), transparent 70%);
 	}
 
 	h1,
 	h2,
 	h3 {
+		text-wrap: balance;
 		font-family: var(--head);
-		font-weight: 500;
+		font-weight: var(--head-weight);
+		letter-spacing: var(--head-track);
+		color: var(--heading);
+	}
+
+	p,
+	figcaption {
+		text-wrap: pretty;
 	}
 
 	a {
-		color: var(--clay);
+		color: var(--accent);
 	}
 
 	a:focus-visible,
-	button:focus-visible {
-		outline: 2px solid var(--sand);
+	button:focus-visible,
+	summary:focus-visible,
+	[tabindex]:focus-visible {
+		outline: 2px solid var(--accent);
 		outline-offset: 3px;
 	}
 
@@ -129,12 +264,55 @@ const ogImage = new URL('/video/ocean.jpg', Astro.site);
 		display: block;
 	}
 
+	.glass {
+		position: relative;
+		background: linear-gradient(
+			180deg,
+			rgba(var(--glass-tint), calc(var(--glass-fill) + 0.1)),
+			rgba(var(--glass-tint), var(--glass-fill)) 40%
+		);
+		-webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+		backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+		border: 1px solid var(--glass-border);
+		box-shadow:
+			inset 0 1px 1px var(--glass-highlight),
+			inset 0 -1px 1px rgba(255, 255, 255, 0.45),
+			inset 0 12px 22px -16px rgba(255, 255, 255, 0.9),
+			inset 0 -14px 24px -18px rgba(30, 40, 80, 0.12),
+			0 0 0 0.5px rgba(30, 40, 80, 0.06),
+			var(--shadow);
+	}
+
+	.glass::after {
+		content: '';
+		position: absolute;
+		inset: -1px;
+		border-radius: inherit;
+		padding: 1.5px;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 1),
+			rgba(255, 255, 255, 0.25) 28%,
+			rgba(255, 255, 255, 0) 50%,
+			rgba(255, 255, 255, 0.25) 72%,
+			rgba(255, 255, 255, 0.9)
+		);
+		-webkit-mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+		mask:
+			linear-gradient(#000 0 0) content-box exclude,
+			linear-gradient(#000 0 0);
+		pointer-events: none;
+	}
+
 	.motion [data-reveal] {
 		opacity: 0;
 		transform: translateY(18px);
 		transition:
-			opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
-			transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+			opacity 0.7s var(--ease) var(--d, 0ms),
+			transform 0.7s var(--ease) var(--d, 0ms);
 	}
 
 	.motion [data-reveal].revealed {
