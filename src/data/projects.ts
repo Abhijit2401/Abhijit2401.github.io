@@ -41,6 +41,24 @@ export const projects: Project[] = [
 		links: [{ label: 'Dissertation (PDF)', href: '/DissertationReport.pdf' }],
 	},
 	{
+		id: 'moss',
+		title: 'Moss',
+		context: 'Personal project, my own game engine',
+		year: '2026',
+		paragraphs: [
+			'A small 2D game engine in C++20 and Vulkan, which I built to learn how renderers and game loops work. SDL3 handles the window and input, vk-bootstrap and VMA set up the device and memory, and the shaders are written in Slang.',
+			'Sprites that share a texture are batched into a single draw call, and the game logic runs on a fixed 60 Hz loop. On top of that it has sprite animation, AABB collision, tilemaps, particles, text, audio and a Dear ImGui overlay for FPS and draw calls.',
+			'Jumper is a small platformer I built on it to test everything together. I\'m using Moss for my GitHub Game Off entry in November.',
+		],
+		tags: ['C++20', 'Vulkan', 'Slang', 'Engine architecture'],
+		media: {
+			video: '/video/moss.mp4',
+			poster: '/video/moss.jpg',
+			alt: 'Jumper, a pixel-art platformer running on the Moss engine, with the debug overlay showing FPS and draw calls.',
+		},
+		links: [{ label: 'GitHub', href: 'https://github.com/Abhijit2401/moss' }],
+	},
+	{
 		id: 'fft-ocean',
 		title: 'FFT Ocean in Unreal Engine 5',
 		context: 'Personal project',
