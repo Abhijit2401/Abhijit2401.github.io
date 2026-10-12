@@ -74,7 +74,7 @@ const rows = projects.map((project) => ({
 							<ProjectRow project={project} flip={flip} />
 							<img class="ship" src="/art/doodles/ship.webp" alt="" aria-hidden="true" width="720" height="291" loading="lazy" data-reveal />
 						</div>
-					) : project.id === 'ascii-filter' ? (
+					) : project.id === 'souls-like' ? (
 						<div class="dock">
 							<ProjectRow project={project} flip={flip} />
 							<img class="doodle alien" src="/art/doodles/alien.webp" alt="" aria-hidden="true" width="720" height="504" loading="lazy" data-drift="0.06" />
@@ -93,14 +93,14 @@ const rows = projects.map((project) => ({
 
 		<section class="building" aria-labelledby="building-heading" data-reveal>
 			<p class="building-label" id="building-heading">Currently building</p>
-			<h3>Moss</h3>
+			<h3>Voxel Dungeon V2</h3>
 			<p>
-				My own small game engine in C++ and Vulkan, written from scratch. I'm using it to make a game for
-				GitHub Game Off in November.
+				Rebuilding my dissertation in Unreal Engine 5.8, replacing the Voxel Plugin with my own voxel storage
+				and mesher.
 			</p>
 			<ul class="building-tags">
 				<li>C++</li>
-				<li>Vulkan</li>
+				<li>Unreal Engine 5.8</li>
 				<li>In progress</li>
 			</ul>
 		</section>
@@ -115,23 +115,29 @@ const rows = projects.map((project) => ({
 			<p class="art-intro" data-reveal>
 				I've been drawing on the side for years and I'm still learning. It came in useful at GMTK 2026:
 				every sprite in <a href="https://tijiboo.itch.io/sign-of-the-times" target="_blank" rel="noopener">Sign of the Times</a>{' '}is
-				mine, drawn in Piskel. Here's a loop from that game, some work from a PSX horror jam, and some sketches.
+				mine, drawn in Piskel. Here's some art from that game, some work from a PSX horror jam, and some sketches.
 			</p>
 
 			<h3 class="art-sub">Game art</h3>
-			<figure class="feature" data-reveal>
-				<video
-					class="lazy-video"
-					src="/art/gmtk-wisteria.mp4"
-					poster="/art/gmtk-wisteria.jpg"
-					aria-label="Pixel-art samurai walking through grass under a wisteria canopy with shafts of light"
-					muted
-					loop
-					playsinline
-					preload="none"
-				></video>
-				<figcaption>Sign of the Times (GMTK 2026). All the pixel art is mine, drawn in Piskel.</figcaption>
-			</figure>
+			<div class="art-grid feature-row" data-reveal>
+				<figure class="feature">
+					<video
+						class="lazy-video"
+						src="/art/gmtk-wisteria.mp4"
+						poster="/art/gmtk-wisteria.jpg"
+						aria-label="Pixel-art samurai walking through grass under a wisteria canopy with shafts of light"
+						muted
+						loop
+						playsinline
+						preload="none"
+					></video>
+					<figcaption>Sign of the Times (GMTK 2026).</figcaption>
+				</figure>
+				<figure class="death">
+					<img src="/art/death-scene.gif" alt="Pixel-art animation of a blade being drawn out of an enemy as it drains into a silhouette" width="384" height="384" loading="lazy" />
+					<figcaption>Death scene animation from the same game, drawn frame by frame.</figcaption>
+				</figure>
+			</div>
 			<div class="art-grid pair" data-reveal>
 				<figure>
 					<img class="transparent" src="/art/hammer-swing.webp" alt="Hand-drawn first-person hammer swing animation" width="480" height="270" loading="lazy" />
@@ -552,14 +558,36 @@ const rows = projects.map((project) => ({
 		box-shadow: var(--shadow);
 	}
 
-	.feature {
-		max-width: 852px;
-		margin: 0 auto;
+	.art-grid.feature-row {
+		display: grid;
+		grid-template-columns: 1.7fr 1fr;
+		gap: 1rem;
+		align-items: start;
 	}
 
 	.feature video {
 		aspect-ratio: 426 / 240;
 		image-rendering: pixelated;
+	}
+
+	.death img {
+		aspect-ratio: 426 / 408;
+		object-fit: contain;
+		padding: 1rem;
+		background: #9d93a8;
+		image-rendering: pixelated;
+	}
+
+	@media (max-width: 620px) {
+		.death img {
+			aspect-ratio: 1;
+		}
+	}
+
+	@media (max-width: 620px) {
+		.art-grid.feature-row {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.art-grid.pair {
@@ -795,13 +823,29 @@ const rows = projects.map((project) => ({
 
 	.ship {
 		position: absolute;
-		right: 10%;
-		top: 0.4rem;
-		width: 250px;
+		right: 4%;
+		bottom: calc(100% - 1.4rem);
+		width: 230px;
 		height: auto;
 		z-index: 1;
 		pointer-events: none;
 		transform-origin: 50% 80%;
+	}
+
+	@media (max-width: 1499px) {
+		.harbour {
+			margin-top: 4.5rem;
+		}
+	}
+
+	@media (min-width: 1500px) {
+		.ship {
+			right: auto;
+			bottom: auto;
+			left: calc(100% + 1rem);
+			top: 30%;
+			width: min(300px, calc((100vw - 100%) / 2 - 2.5rem));
+		}
 	}
 
 	.motion .ship {
